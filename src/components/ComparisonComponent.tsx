@@ -22,12 +22,16 @@ export default function ComparisonComponent({ data }: ComparisonComponentProps) 
     if (type === 'country') {
       return getCountryYearData(data, item as string);
     } else {
-      return data.filter(d => d.year === item).map(d => d.credit);
+      return data.filter(d => d.year === parseInt(item as string)).map(d => d.credit);
     }
   };
 
   const getYearsForCountry = (country: string) => {
     return data.filter(d => d.country === country).map(d => d.year);
+  };
+
+  const getCountriesForYear = (year: string | number) => {
+    return data.filter(d => d.year === parseInt(year as string)).map(d => d.country);
   };
 
   const renderComparison = () => {
@@ -98,13 +102,13 @@ export default function ComparisonComponent({ data }: ComparisonComponentProps) 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartComponent
             data={data1}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : undefined}
+            years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : getCountriesForYear(selectedItem1).map((_, index) => index + 1)}
             title={`Histograma - ${selectedItem1}`}
             type="histogram"
           />
           <ChartComponent
             data={data2}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : undefined}
+            years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : getCountriesForYear(selectedItem2).map((_, index) => index + 1)}
             title={`Histograma - ${selectedItem2}`}
             type="histogram"
           />
@@ -113,13 +117,13 @@ export default function ComparisonComponent({ data }: ComparisonComponentProps) 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartComponent
             data={data1}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : undefined}
+            years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : getCountriesForYear(selectedItem1).map((_, index) => index + 1)}
             title={`Gráfico de Dispersión - ${selectedItem1}`}
             type="scatter"
           />
           <ChartComponent
             data={data2}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : undefined}
+            years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : getCountriesForYear(selectedItem2).map((_, index) => index + 1)}
             title={`Gráfico de Dispersión - ${selectedItem2}`}
             type="scatter"
           />
