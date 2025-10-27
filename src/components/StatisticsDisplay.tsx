@@ -26,11 +26,7 @@ export default function StatisticsDisplay({ statistics, title, showExport = fals
       ['Mínimo', statistics.min],
       ['Suma', statistics.sum],
       ['Promedio', statistics.mean],
-      ['Moda', typeof statistics.mode === 'string' 
-        ? statistics.mode 
-        : Array.isArray(statistics.mode) 
-          ? statistics.mode.join(', ') 
-          : statistics.mode],
+      // Moda omitida - no relevante para datos temporales
       ['Varianza', statistics.variance],
       ['Desviación Estándar', statistics.standardDeviation]
     ].map(row => row.join(',')).join('\n');
@@ -51,7 +47,8 @@ export default function StatisticsDisplay({ statistics, title, showExport = fals
     { label: 'Mínimo', value: statistics.min, color: 'text-green-600', bgColor: 'bg-green-50', icon: '↓' },
     { label: 'Suma', value: statistics.sum, color: 'text-blue-600', bgColor: 'bg-blue-50', icon: '∑' },
     { label: 'Promedio', value: statistics.mean, color: 'text-purple-600', bgColor: 'bg-purple-50', icon: 'μ' },
-    { label: 'Moda', value: statistics.mode, color: 'text-orange-600', bgColor: 'bg-orange-50', icon: '📊' },
+    // Moda ocultada - no es relevante para datos temporales únicos
+    // { label: 'Moda', value: statistics.mode, color: 'text-orange-600', bgColor: 'bg-orange-50', icon: '📊' },
     { label: 'Varianza', value: statistics.variance, color: 'text-indigo-600', bgColor: 'bg-indigo-50', icon: 'σ²' },
     { label: 'Desviación Estándar', value: statistics.standardDeviation, color: 'text-pink-600', bgColor: 'bg-pink-50', icon: 'σ' },
   ];
