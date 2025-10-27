@@ -106,17 +106,12 @@ export default function Home() {
                   showExport={true}
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Solo mostramos el gráfico de dispersión */}
+                <div className="w-full">
                   <ChartComponent
                     data={selectedCountryData}
                     years={selectedCountryYears}
-                    title={`Histograma - ${selectedCountry}`}
-                    type="histogram"
-                  />
-                  <ChartComponent
-                    data={selectedCountryData}
-                    years={selectedCountryYears}
-                    title={`Gráfico de Dispersión - ${selectedCountry}`}
+                    title={`Evolución Temporal - ${selectedCountry}`}
                     type="scatter"
                   />
                 </div>

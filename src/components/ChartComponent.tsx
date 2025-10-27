@@ -202,13 +202,8 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
     );
   }
 
-  // Solo mostrar gráfico de dispersión por ahora
-  // El histograma está comentado para estudiar más adelante
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
-      <div className="mb-4 text-sm text-gray-600">
-        📊 Gráfico de Dispersión - Histograma temporalmente deshabilitado
-      </div>
       <div className="h-96">
         <Scatter data={getScatterData()} options={chartOptions} />
       </div>

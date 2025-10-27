@@ -99,32 +99,18 @@ export default function ComparisonComponent({ data }: ComparisonComponentProps) 
           </div>
         </div>
 
+        {/* Solo gráficos de dispersión para comparación */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartComponent
             data={data1}
             years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : getCountriesForYear(selectedItem1).map((_, index) => index + 1)}
-            title={`Histograma - ${selectedItem1}`}
-            type="histogram"
-          />
-          <ChartComponent
-            data={data2}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : getCountriesForYear(selectedItem2).map((_, index) => index + 1)}
-            title={`Histograma - ${selectedItem2}`}
-            type="histogram"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ChartComponent
-            data={data1}
-            years={comparisonType === 'country' ? getYearsForCountry(selectedItem1 as string) : getCountriesForYear(selectedItem1).map((_, index) => index + 1)}
-            title={`Gráfico de Dispersión - ${selectedItem1}`}
+            title={`Evolución - ${selectedItem1}`}
             type="scatter"
           />
           <ChartComponent
             data={data2}
             years={comparisonType === 'country' ? getYearsForCountry(selectedItem2 as string) : getCountriesForYear(selectedItem2).map((_, index) => index + 1)}
-            title={`Gráfico de Dispersión - ${selectedItem2}`}
+            title={`Evolución - ${selectedItem2}`}
             type="scatter"
           />
         </div>
