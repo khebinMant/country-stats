@@ -9,7 +9,10 @@ interface StatisticsDisplayProps {
 }
 
 export default function StatisticsDisplay({ statistics, title, showExport = false }: StatisticsDisplayProps) {
-  const formatNumber = (num: number | number[]): string => {
+  const formatNumber = (num: number | number[] | string): string => {
+    if (typeof num === 'string') {
+      return num; // Si es string (mensaje de "No hay moda"), lo devolvemos tal como está
+    }
     if (Array.isArray(num)) {
       return num.map(n => n.toLocaleString('es-ES', { maximumFractionDigits: 2 })).join(', ');
     }
@@ -23,7 +26,11 @@ export default function StatisticsDisplay({ statistics, title, showExport = fals
       ['Mínimo', statistics.min],
       ['Suma', statistics.sum],
       ['Promedio', statistics.mean],
-      ['Moda', Array.isArray(statistics.mode) ? statistics.mode.join(', ') : statistics.mode],
+      ['Moda', typeof statistics.mode === 'string' 
+        ? statistics.mode 
+        : Array.isArray(statistics.mode) 
+          ? statistics.mode.join(', ') 
+          : statistics.mode],
       ['Varianza', statistics.variance],
       ['Desviación Estándar', statistics.standardDeviation]
     ].map(row => row.join(',')).join('\n');

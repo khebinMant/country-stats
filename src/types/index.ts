@@ -9,7 +9,7 @@ export interface Statistics {
   min: number;
   sum: number;
   mean: number;
-  mode: number | number[];
+  mode: number | number[] | string;
   variance: number;
   standardDeviation: number;
 }

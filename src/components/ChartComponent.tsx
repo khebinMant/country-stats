@@ -149,48 +149,39 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
       tooltip: {
         callbacks: {
           label: function(context: any) {
-            if (type === 'histogram') {
-              return `Frecuencia: ${context.parsed.y} países`;
-            } else {
-              const year = context.parsed.x;
-              const value = context.parsed.y;
-              return [`Año: ${year}`, `Población: ${value.toLocaleString('es-ES')}`];
-            }
+            // Solo para scatter plots - sin histograma
+            const year = context.parsed.x;
+            const value = context.parsed.y;
+            return [`Año: ${year}`, `Población: ${value.toLocaleString('es-ES')}`];
           },
           title: function(context: any) {
-            if (type === 'histogram') {
-              return `Rango: ${context[0].label}`;
-            } else {
-              return 'Evolución Temporal';
-            }
+            return 'Evolución Temporal'; // Solo scatter plots
           }
         }
       }
     },
     scales: {
       y: {
-        beginAtZero: type === 'histogram',
+        beginAtZero: false, // Solo para scatter plots
         title: {
           display: true,
-          text: type === 'histogram' ? 'Frecuencia (Cantidad)' : 'Valor de Población'
+          text: 'Valor de Población' // Solo scatter plots
         },
         ticks: {
           callback: function(value: any) {
-            if (type === 'scatter') {
-              return typeof value === 'number' ? value.toLocaleString('es-ES', { notation: 'compact' }) : value;
-            }
-            return typeof value === 'number' ? value.toLocaleString('es-ES') : value;
+            // Formato compacto para números grandes
+            return typeof value === 'number' ? value.toLocaleString('es-ES', { notation: 'compact' }) : value;
           }
         }
       },
       x: {
         title: {
           display: true,
-          text: type === 'histogram' ? 'Rangos de Valores' : 'Años'
+          text: 'Años' // Solo scatter plots
         },
         ticks: {
           callback: function(value: any, index: number) {
-            if (type === 'scatter' && years && years.length > 0) {
+            if (years && years.length > 0) {
               return years[index] ? years[index].toString() : '';
             }
             return value;
@@ -211,14 +202,15 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
     );
   }
 
+  // Solo mostrar gráfico de dispersión por ahora
+  // El histograma está comentado para estudiar más adelante
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
+      <div className="mb-4 text-sm text-gray-600">
+        📊 Gráfico de Dispersión - Histograma temporalmente deshabilitado
+      </div>
       <div className="h-96">
-        {type === 'histogram' ? (
-          <Bar data={getHistogramData()} options={chartOptions} />
-        ) : (
-          <Scatter data={getScatterData()} options={chartOptions} />
-        )}
+        <Scatter data={getScatterData()} options={chartOptions} />
       </div>
     </div>
   );

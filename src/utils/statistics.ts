@@ -35,7 +35,7 @@ export function calculateStatistics(data: number[]): Statistics {
   };
 }
 
-function calculateMode(data: number[]): number | number[] {
+function calculateMode(data: number[]): number | number[] | string {
   const frequency: { [key: number]: number } = {};
   
   data.forEach(value => {
@@ -43,9 +43,21 @@ function calculateMode(data: number[]): number | number[] {
   });
   
   const maxFreq = Math.max(...Object.values(frequency));
+  
+  // Si la frecuencia máxima es 1, significa que todos los valores son únicos
+  // Por lo tanto, no hay moda
+  if (maxFreq === 1) {
+    return "No hay moda (todos los valores son únicos)";
+  }
+  
   const modes = Object.keys(frequency)
     .filter(key => frequency[Number(key)] === maxFreq)
     .map(Number);
+  
+  // Si hay muchas modas (más de 5), es mejor decir que no hay una moda clara
+  if (modes.length > 5) {
+    return `${modes.length} valores con la misma frecuencia (distribución uniforme)`;
+  }
   
   return modes.length === 1 ? modes[0] : modes;
 }
