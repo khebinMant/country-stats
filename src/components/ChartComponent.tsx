@@ -91,23 +91,23 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
     const scatterPoints = data.map((value, index) => {
       let backgroundColor;
       let borderColor;
-      let radius = 4;
+      let radius = 6;
       
       if (value === maxValue) {
         backgroundColor = 'rgba(255, 99, 132, 0.8)'; // Red for max
         borderColor = 'rgba(255, 99, 132, 1)';
-        radius = 8;
+        radius = 10;
       } else if (value === minValue) {
         backgroundColor = 'rgba(75, 192, 192, 0.8)'; // Green for min
         borderColor = 'rgba(75, 192, 192, 1)';
-        radius = 8;
+        radius = 10;
       } else {
-        backgroundColor = 'rgba(54, 162, 235, 0.6)'; // Blue for others
+        backgroundColor = 'rgba(54, 162, 235, 0.7)'; // Blue for others
         borderColor = 'rgba(54, 162, 235, 1)';
       }
       
       return {
-        x: years[index] || index + 1,
+        x: years[index] || (1960 + index), // Fallback to sequential years starting from 1960
         y: value,
         backgroundColor,
         borderColor,
@@ -118,12 +118,14 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
     return {
       datasets: [
         {
-          label: 'Créditos',
+          label: 'Población por Año',
           data: scatterPoints,
           backgroundColor: scatterPoints.map(p => p.backgroundColor),
           borderColor: scatterPoints.map(p => p.borderColor),
           pointRadius: scatterPoints.map(p => p.radius),
           pointHoverRadius: scatterPoints.map(p => p.radius + 2),
+          showLine: true, // Conecta los puntos con líneas
+          tension: 0.1, // Suaviza las líneas
         },
       ],
     };
@@ -147,8 +149,20 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
       tooltip: {
         callbacks: {
           label: function(context: any) {
-            const value = context.parsed.y || context.parsed;
-            return `${context.dataset.label}: ${value.toLocaleString('es-ES')}`;
+            if (type === 'histogram') {
+              return `Frecuencia: ${context.parsed.y} países`;
+            } else {
+              const year = context.parsed.x;
+              const value = context.parsed.y;
+              return [`Año: ${year}`, `Población: ${value.toLocaleString('es-ES')}`];
+            }
+          },
+          title: function(context: any) {
+            if (type === 'histogram') {
+              return `Rango: ${context[0].label}`;
+            } else {
+              return 'Evolución Temporal';
+            }
           }
         }
       }
@@ -156,17 +170,28 @@ export default function ChartComponent({ data, years = [], title, type }: ChartC
     scales: {
       y: {
         beginAtZero: type === 'histogram',
+        title: {
+          display: true,
+          text: type === 'histogram' ? 'Frecuencia (Cantidad)' : 'Valor de Población'
+        },
         ticks: {
           callback: function(value: any) {
+            if (type === 'scatter') {
+              return typeof value === 'number' ? value.toLocaleString('es-ES', { notation: 'compact' }) : value;
+            }
             return typeof value === 'number' ? value.toLocaleString('es-ES') : value;
           }
         }
       },
       x: {
+        title: {
+          display: true,
+          text: type === 'histogram' ? 'Rangos de Valores' : 'Años'
+        },
         ticks: {
           callback: function(value: any, index: number) {
             if (type === 'scatter' && years && years.length > 0) {
-              return years[index] || value;
+              return years[index] ? years[index].toString() : '';
             }
             return value;
           }
